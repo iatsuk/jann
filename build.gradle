@@ -27,7 +27,9 @@ dependencies {
     //api()
 
     // This dependencies are used internally, and not exposed to consumers on their own compile classpath.
-    implementation(
+    //implementation()
+
+    visualImplementation(
             group: 'com.spotify', name: 'annoy-jni', version: '0.1.4',
     )
 
