@@ -1,0 +1,38 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    targetCompatibility JavaVersion.VERSION_1_6
+    sourceCompatibility JavaVersion.VERSION_1_6
+}
+
+repositories {
+    jcenter()
+}
+
+sourceSets {
+    visual {
+        java.srcDirs = ['src/visual/java']
+        resources.srcDir 'src/visual/resources'
+    }
+}
+
+configurations {
+    visual.extendsFrom compile
+}
+
+dependencies {
+    // This dependencies are exported to consumers, that is to say found on their compile classpath.
+    //api()
+
+    // This dependencies are used internally, and not exposed to consumers on their own compile classpath.
+    implementation(
+            group: 'com.spotify', name: 'annoy-jni', version: '0.1.4',
+    )
+
+    // This dependencies are used in tests.
+    testImplementation(
+            'junit:junit:4.12',
+    )
+}
