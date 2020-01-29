@@ -3,4 +3,8 @@ dependencies {
             deps.jmh,
             deps.annoy,
     )
+
+    annotationProcessor (
+            deps.jmh,
+    )
 }
