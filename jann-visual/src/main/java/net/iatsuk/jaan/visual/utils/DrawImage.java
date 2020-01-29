@@ -1,6 +1,6 @@
 package net.iatsuk.jaan.visual.utils;
 
-import net.iatsuk.jaan.visual.pojo.Point2D;
+import net.iatsuk.jaan.test.pojo.Point2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -26,6 +26,7 @@ public class DrawImage {
 
         try {
             File dir = new File("visuals");
+            //noinspection ResultOfMethodCallIgnored
             dir.mkdirs();
             ImageIO.write(image, "jpg", new File(dir, name));
         } catch (IOException e) {

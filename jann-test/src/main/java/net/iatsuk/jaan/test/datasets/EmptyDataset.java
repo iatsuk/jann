@@ -1,6 +1,6 @@
-package net.iatsuk.jaan.visual.datasets;
+package net.iatsuk.jaan.test.datasets;
 
-import net.iatsuk.jaan.visual.pojo.Point2D;
+import net.iatsuk.jaan.test.pojo.Point2D;
 
 public class EmptyDataset implements Dataset2D {
 

@@ -2,8 +2,8 @@ package net.iatsuk.jaan.visual;
 
 import com.spotify.annoy.jni.base.Annoy;
 import com.spotify.annoy.jni.base.AnnoyIndex;
-import net.iatsuk.jaan.visual.datasets.*;
-import net.iatsuk.jaan.visual.pojo.Point2D;
+import net.iatsuk.jaan.test.datasets.*;
+import net.iatsuk.jaan.test.pojo.Point2D;
 import net.iatsuk.jaan.visual.utils.DrawImage;
 
 import java.awt.*;

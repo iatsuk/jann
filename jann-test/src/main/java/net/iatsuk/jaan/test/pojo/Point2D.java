@@ -1,4 +1,4 @@
-package net.iatsuk.jaan.visual.pojo;
+package net.iatsuk.jaan.test.pojo;
 
 public class Point2D {
     public int x;
