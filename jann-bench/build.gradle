@@ -1,0 +1,6 @@
+dependencies {
+    implementation(
+            deps.jmh,
+            deps.annoy,
+    )
+}

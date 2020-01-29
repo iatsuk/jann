@@ -7,6 +7,10 @@ configure(subprojects) {
         sourceCompatibility = JavaVersion.VERSION_1_6
     }
 
+    ext.versions = [
+            jmh: '1.23',
+    ]
+
     ext.deps = [
             // external ann
             annoy: [
@@ -16,8 +20,14 @@ configure(subprojects) {
                     'com.google.guava:guava:15.0',
             ],
 
+            // benchmarking
+            jmh  : [
+                    "org.openjdk.jmh:jmh-core:${versions.jmh}",
+                    "org.openjdk.jmh:jmh-generator-annprocess:${versions.jmh}",
+            ],
+
             // tests
-            junit    : [
+            junit: [
                     'junit:junit:4.12'
             ],
     ]
