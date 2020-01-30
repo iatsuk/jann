@@ -1,7 +1,7 @@
 dependencies {
     implementation(
             deps.jmh,
-            deps.annoy,
+            deps.annoyj,
     )
 
     annotationProcessor (

@@ -13,7 +13,7 @@ configure(subprojects) {
 
     ext.deps = [
             // external ann
-            annoy: [
+            annoy : [
                     'com.spotify:annoy-jni:0.1.4',
                     'com.spotify.sparkey:sparkey:2.1.3',
                     'org.apache.commons:commons-lang3:3.5',
@@ -22,8 +22,15 @@ configure(subprojects) {
                     'org.slf4j:slf4j-api:1.7.2',
             ],
 
+            annoyj: [
+                    'com.spotify:annoy:0.2.6',
+            ],
+
+            // data source
+            csv   : 'net.sourceforge.javacsv:javacsv:2.0',
+
             // benchmarking
-            jmh  : [
+            jmh   : [
                     "org.openjdk.jmh:jmh-core:${versions.jmh}",
                     "org.openjdk.jmh:jmh-generator-annprocess:${versions.jmh}",
                     'net.sf.jopt-simple:jopt-simple:4.6',
@@ -32,7 +39,8 @@ configure(subprojects) {
 
             // tests
             junit: [
-                    'junit:junit:4.12'
+                    'junit:junit:4.12',
+                    'org.hamcrest:hamcrest-core:1.3',
             ],
     ]
 
