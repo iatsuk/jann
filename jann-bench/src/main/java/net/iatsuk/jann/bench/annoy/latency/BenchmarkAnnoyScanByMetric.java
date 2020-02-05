@@ -1,4 +1,4 @@
-package net.iatsuk.jaan.bench.annoy;
+package net.iatsuk.jann.bench.annoy.latency;
 
 import com.spotify.annoy.ANNIndex;
 import com.spotify.annoy.AnnoyIndex;
@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 @Fork(value = 2, jvmArgs = {"-Xms4G", "-Xmx4G"})
 @Warmup(iterations = 3)
 @Measurement(iterations = 8)
-public class BenchmarkAnnoyScan1Mln {
+public class BenchmarkAnnoyScanByMetric {
 
     @Param({"1000"})
     private int N;
@@ -33,11 +33,12 @@ public class BenchmarkAnnoyScan1Mln {
     private int dim;
 
     private AnnoyIndex indexAngular;
+    private AnnoyIndex indexEuclidean;
     private List<float[]> queries;
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(BenchmarkAnnoyScan1Mln.class.getSimpleName())
+                .include(BenchmarkAnnoyScanByMetric.class.getSimpleName())
                 .forks(1)
                 .build();
 
@@ -46,7 +47,8 @@ public class BenchmarkAnnoyScan1Mln {
 
     @Setup
     public void setup() throws IOException {
-        indexAngular = new ANNIndex(dim, "data/groups_angular_t100_d100_total.ann", IndexType.ANGULAR);
+        indexAngular = new ANNIndex(dim, "data/groups_angular.ann", IndexType.ANGULAR);
+        indexEuclidean = new ANNIndex(dim, "data/groups_euclidean.ann", IndexType.EUCLIDEAN);
         Random rnd = new Random(0xDEADBEEF);
         queries = IntStream.range(0, N).boxed()
                 .map(i -> makeRandomVector(rnd, dim))
@@ -65,6 +67,14 @@ public class BenchmarkAnnoyScan1Mln {
     public void scanAngularByVector(Blackhole bh) {
         queries.forEach(query -> {
             List<Integer> neighbours = indexAngular.getNearest(query, NEIGHBOURS);
+            bh.consume(neighbours);
+        });
+    }
+
+    @Benchmark
+    public void scanEuclideanByVector(Blackhole bh) {
+        queries.forEach(query -> {
+            List<Integer> neighbours = indexEuclidean.getNearest(query, NEIGHBOURS);
             bh.consume(neighbours);
         });
     }

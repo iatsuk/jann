@@ -1,4 +1,4 @@
-package net.iatsuk.jaan.bench.annoy;
+package net.iatsuk.jann.bench.annoy.latency;
 
 import com.spotify.annoy.ANNIndex;
 import com.spotify.annoy.AnnoyIndex;
@@ -27,7 +27,7 @@ public class BenchmarkAnnoyScanByNTrees {
 
     @Param({"1000"})
     private int N;
-    @Param({"100"})
+    @Param({"1000"})
     private int NEIGHBOURS;
     @Param({"100"})
     private int dim;
@@ -35,6 +35,7 @@ public class BenchmarkAnnoyScanByNTrees {
     private AnnoyIndex indexAngular1;
     private AnnoyIndex indexAngular10;
     private AnnoyIndex indexAngular100;
+    private AnnoyIndex indexAngular50;
     private List<float[]> queries;
 
     public static void main(String[] args) throws RunnerException {
@@ -48,9 +49,10 @@ public class BenchmarkAnnoyScanByNTrees {
 
     @Setup
     public void setup() throws IOException {
-        indexAngular1 = new ANNIndex(dim, "data/groups_angular1.ann", IndexType.ANGULAR);
-        indexAngular10 = new ANNIndex(dim, "data/groups_angular10.ann", IndexType.ANGULAR);
-        indexAngular100 = new ANNIndex(dim, "data/groups_angular100.ann", IndexType.ANGULAR);
+        indexAngular1 = new ANNIndex(dim, "data/groups_angular_t5_d100_total.ann", IndexType.ANGULAR);
+        indexAngular10 = new ANNIndex(dim, "data/groups_angular_t15_d100_total.ann", IndexType.ANGULAR);
+        indexAngular100 = new ANNIndex(dim, "data/groups_angular_t25_d100_total.ann", IndexType.ANGULAR);
+        indexAngular50 = new ANNIndex(dim, "data/groups_angular_t50_d100_total.ann", IndexType.ANGULAR);
         Random rnd = new Random(0xDEADBEEF);
         queries = IntStream.range(0, N).boxed()
                 .map(i -> makeRandomVector(rnd, dim))
@@ -66,7 +68,7 @@ public class BenchmarkAnnoyScanByNTrees {
     }
 
     @Benchmark
-    public void scanAngularByTrees1(Blackhole bh) {
+    public void scanAngularByTrees5(Blackhole bh) {
         queries.forEach(query -> {
             List<Integer> neighbours = indexAngular1.getNearest(query, NEIGHBOURS);
             bh.consume(neighbours);
@@ -74,7 +76,7 @@ public class BenchmarkAnnoyScanByNTrees {
     }
 
     @Benchmark
-    public void scanAngularByTrees10(Blackhole bh) {
+    public void scanAngularByTrees15(Blackhole bh) {
         queries.forEach(query -> {
             List<Integer> neighbours = indexAngular10.getNearest(query, NEIGHBOURS);
             bh.consume(neighbours);
@@ -82,7 +84,15 @@ public class BenchmarkAnnoyScanByNTrees {
     }
 
     @Benchmark
-    public void scanAngularByTrees100(Blackhole bh) {
+    public void scanAngularByTrees25(Blackhole bh) {
+        queries.forEach(query -> {
+            List<Integer> neighbours = indexAngular100.getNearest(query, NEIGHBOURS);
+            bh.consume(neighbours);
+        });
+    }
+
+    @Benchmark
+    public void scanAngularByTrees50(Blackhole bh) {
         queries.forEach(query -> {
             List<Integer> neighbours = indexAngular100.getNearest(query, NEIGHBOURS);
             bh.consume(neighbours);

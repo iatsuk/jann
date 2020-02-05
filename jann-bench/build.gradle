@@ -1,7 +1,10 @@
 dependencies {
     implementation(
+            project(':jann-api'),
             deps.jmh,
             deps.annoyj,
+            deps.annoy4s,
+            deps.guava,
     )
 
     annotationProcessor (

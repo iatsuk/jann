@@ -1,8 +1,10 @@
-package net.iatsuk.jaan.bench.annoy;
+package net.iatsuk.jann.bench.annoy.latency;
 
-import com.spotify.annoy.ANNIndex;
-import com.spotify.annoy.AnnoyIndex;
-import com.spotify.annoy.IndexType;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
+import net.iatsuk.jann.annoy.ANNIndex;
+import net.iatsuk.jann.annoy.AnnoyIndex;
+import net.iatsuk.jann.annoy.IndexType;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -23,22 +26,23 @@ import java.util.stream.IntStream;
 @Fork(value = 2, jvmArgs = {"-Xms4G", "-Xmx4G"})
 @Warmup(iterations = 3)
 @Measurement(iterations = 8)
-public class BenchmarkAnnoyScanByMetric {
+public class BenchmarkAnnoyScanSimple {
 
     @Param({"1000"})
     private int N;
-    @Param({"100"})
+    @Param({"1000"})
     private int NEIGHBOURS;
     @Param({"100"})
-    private int dim;
+    private int DIM;
+    @Param({"4"})
+    private int TREES;
 
     private AnnoyIndex indexAngular;
-    private AnnoyIndex indexEuclidean;
     private List<float[]> queries;
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(BenchmarkAnnoyScanByMetric.class.getSimpleName())
+                .include(BenchmarkAnnoyScanSimple.class.getSimpleName())
                 .forks(1)
                 .build();
 
@@ -47,34 +51,21 @@ public class BenchmarkAnnoyScanByMetric {
 
     @Setup
     public void setup() throws IOException {
-        indexAngular = new ANNIndex(dim, "data/groups_angular.ann", IndexType.ANGULAR);
-        indexEuclidean = new ANNIndex(dim, "data/groups_euclidean.ann", IndexType.EUCLIDEAN);
+        indexAngular = new ANNIndex(DIM, String.format("/Volumes/ramka/groups_angular_t%d_d100_r1000000.ann", TREES), IndexType.ANGULAR);
         Random rnd = new Random(0xDEADBEEF);
-        queries = IntStream.range(0, N).boxed()
-                .map(i -> makeRandomVector(rnd, dim))
-                .collect(Collectors.toList());
+        queries = IntStream.range(0, N).boxed().map(i -> rndVector(rnd, DIM)).collect(Collectors.toList());
     }
 
-    private float[] makeRandomVector(Random rnd, int dim) {
-        float[] result = new float[dim];
-        for (int i = 0; i < dim; i++) {
-            result[i] = rnd.nextFloat() * 2 - 1;
-        }
-        return result;
+    private float[] rndVector(Random rnd, int dim) {
+        return Floats.toArray(Doubles.asList(
+                DoubleStream.generate(rnd::nextFloat).limit(dim).map(r -> r * 2 - 1).toArray()
+        ));
     }
 
     @Benchmark
-    public void scanAngularByVector(Blackhole bh) {
+    public void scanAngular(Blackhole bh) {
         queries.forEach(query -> {
             List<Integer> neighbours = indexAngular.getNearest(query, NEIGHBOURS);
-            bh.consume(neighbours);
-        });
-    }
-
-    @Benchmark
-    public void scanEuclideanByVector(Blackhole bh) {
-        queries.forEach(query -> {
-            List<Integer> neighbours = indexEuclidean.getNearest(query, NEIGHBOURS);
             bh.consume(neighbours);
         });
     }

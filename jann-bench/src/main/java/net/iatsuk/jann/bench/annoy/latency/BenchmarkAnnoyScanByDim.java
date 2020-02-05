@@ -1,4 +1,4 @@
-package net.iatsuk.jaan.bench.annoy;
+package net.iatsuk.jann.bench.annoy.latency;
 
 import com.spotify.annoy.ANNIndex;
 import com.spotify.annoy.AnnoyIndex;
@@ -28,7 +28,7 @@ public class BenchmarkAnnoyScanByDim {
 
     @Param({"1000"})
     private int N;
-    @Param({"100"})
+    @Param({"1000"})
     private int NEIGHBOURS;
 
     private AnnoyIndex indexAngular25;
@@ -48,10 +48,10 @@ public class BenchmarkAnnoyScanByDim {
 
     @Setup
     public void setup() throws IOException {
-        indexAngular25 = new ANNIndex(25, "data/groups_angular_t100_d25.ann", IndexType.ANGULAR);
-        indexAngular50 = new ANNIndex(50, "data/groups_angular_t100_d50.ann", IndexType.ANGULAR);
-        indexAngular75 = new ANNIndex(75, "data/groups_angular_t100_d75.ann", IndexType.ANGULAR);
-        indexAngular100 = new ANNIndex(100, "data/groups_angular_t100_d100.ann", IndexType.ANGULAR);
+        indexAngular25 = new ANNIndex(25, String.format("data/groups_angular_t10_d%d_r1000000.ann", 25), IndexType.ANGULAR);
+        indexAngular50 = new ANNIndex(50, String.format("data/groups_angular_t10_d%d_r1000000.ann", 50), IndexType.ANGULAR);
+        indexAngular75 = new ANNIndex(75, String.format("data/groups_angular_t10_d%d_r1000000.ann", 75), IndexType.ANGULAR);
+        indexAngular100 = new ANNIndex(100, String.format("data/groups_angular_t10_d%d_r1000000.ann", 100), IndexType.ANGULAR);
         Random rnd = new Random(0xDEADBEEF);
         queries = IntStream.range(0, N).boxed()
                 .map(i -> makeRandomVector(rnd, 100))
