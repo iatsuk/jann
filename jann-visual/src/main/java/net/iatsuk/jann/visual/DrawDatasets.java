@@ -1,7 +1,7 @@
-package net.iatsuk.jaan.visual;
+package net.iatsuk.jann.visual;
 
 import net.iatsuk.jaan.test.datasets.*;
-import net.iatsuk.jaan.visual.utils.DrawImage;
+import net.iatsuk.jann.visual.utils.DrawImage;
 
 public class DrawDatasets {
 

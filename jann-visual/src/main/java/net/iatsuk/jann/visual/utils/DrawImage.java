@@ -1,4 +1,4 @@
-package net.iatsuk.jaan.visual.utils;
+package net.iatsuk.jann.visual.utils;
 
 import net.iatsuk.jaan.test.pojo.Point2D;
 
